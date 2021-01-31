@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+ <head> 
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+  
+  <title> 注册 </title> 
+  <link rel="stylesheet" href="style/css/base.css"  /> 
+  <link rel="stylesheet" href="style/css/login.css"  /> 
+
+  <script  type="text/javascript" src="style/js/jquery-1.7.1.min.js"></script> 
+
+
+
+  <!-- 验证码 -->
+  <style>
+  		.verify{
+			width: 95px;
+			position: absolute;
+			right: 0;
+			top: 0px;
+			cursor: pointer;
+			height: 46px;
+			font-size: 14px;
+			text-align: center;
+			line-height: 46px; 
+			background-color: rgb(50,165,231);
+			color: black;
+		}
+		::-webkit-scrollbar{
+			display:none;
+		}
+  </style>
+ 
+ 
+ 
+ </head> 
+ <body> 
+  <div id="content" class="content"> 
+   <div class="banner-box"> 
+    <form id="mainForm" class="main-form" enctype="application/x-www-form-urlencoded" novalidate="novalidate"> 
+		 <div class="tab-title"> 
+		  <a class="linkAGray" id="toaccountLogin" href="adminlogin.html">管理员账号登录</a> 
+		  <span class="register-line"></span> 
+		  <a class="linkABlue" id="toVCodeLogin" href="adminregister.html">管理员账号注册</a> 
+		 </div> 
+	
+		 <div id="errorMsg" class="tip-box visiblility-hidden"> 
+		  <i class="err-ico"></i> 
+		  <span class="tip-font" id="tipMsg" >请填写完整的注册信息</span> 
+		  <span id="closeErrorMsg" class="close-ico"></span> 
+		 </div> 
+	    	    
+		  <!-- 用户名 -->
+		 <div class="normalInput" id="cycode-box"> 
+		   <input class="ipt-account inp-focus" name="account" id="account" maxlength="50" placeholder="用户名：" autocomplete="off"  onfocus="closeErrorMsg()" /> 
+		 </div>   
+		 <div class="normalInput cycode-box fieldInput "> 
+		  <input type="password" class="inp-focus" name="password" id="password" maxlength="16" autocomplete="off"  placeholder="密码：" onfocus="closeErrorMsg()"  />
+		 </div> 	 
+		 <div class="normalInput cycode-box fieldInput"> 
+		  <div class="cycode-selectbox"> 
+		   <input type="tel" class="inp-focus"  name="tel" id="tel" maxlength="50" placeholder="电话：" autocomplete="off" onfocus="closeErrorMsg()" />	    
+		  </div> 
+		 </div> 
+		 <a id="register" class="fullBtnBlue">注册</a> 
+    </form>
+   </div> 
+  </div> 
+
+
+  <script type="text/javascript">
+  	//点击注册事件
+  	$("#register").click(function(){
+  			var account = $("#account").val();
+  			var password = $.trim( $("#password").val() );
+  			//var againpassword = $.trim( $("#againpassword").val() );
+    		var tel = $.trim( $("#tel").val() );
+			if( account=="" || tel=="" || password==""){
+				var obj = document.getElementById("errorMsg");
+				$("#tipMsg").html("请填写完整的注册信息！");
+				obj.setAttribute("class", "tip-box visiblility-show");
+				return;			
+			}		
+	
+	//注册请求
+	var obj = {aname:account, pwd:password, tel:tel}
+	$.ajax({
+		url: "../admin?op=add",
+		dataType: "json",
+		data: obj,
+		success: function(data, status) {
+			  //电话号码校验
+			var reg =/0\\d{2,3}[-]?\\d{7,8}|0\\d{2,3}\\s?\\d{7,8}|13[0-9]\\d{8}|15[1089]\\d{8}/;
+			var t = tel.match(reg);
+			if( t == null ){
+				//提示错误信息
+				var obj = document.getElementById("errorMsg");
+				//修改提示文字
+				$("#tipMsg").html("请填写正确的电话号码！");
+				obj.setAttribute("class", "tip-box visiblility-show");
+				return;
+			}
+			if(data.code == 200) {
+				 window.location.href = 'adminlogin.html'; 
+			}else{
+				var obj = document.getElementById("errorMsg");
+				$("#tipMsg").html("该账户已被注册！");
+				obj.setAttribute("class", "tip-box visiblility-show");
+				return;
+			}
+		},
+		error: function(data, status, e) {
+			var obj = document.getElementById("errorMsg");
+			$("#tipMsg").html("该账户已被注册！");
+			obj.setAttribute("class", "tip-box visiblility-show");
+			return;
+		}
+	});
+
+	
+ });
+  	
+	//点击错误信息关闭按钮
+		$("#closeErrorMsg").click(function(){
+		var obj = document.getElementById("errorMsg");
+		obj.setAttribute("class", "tip-box visiblility-hidden");
+	});
+
+		//关闭错误提示
+		function closeErrorMsg(){
+			var obj = document.getElementById("errorMsg");
+		obj.setAttribute("class", "tip-box visiblility-hidden");
+	}
+
+		
+</script>
+</body>
+</html>

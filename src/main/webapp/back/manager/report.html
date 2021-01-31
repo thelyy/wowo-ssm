@@ -1,0 +1,71 @@
+<table  data-options="fit:true"></table>
+
+</head>
+<body>
+<div align="center">
+    <label for="start">开始日期：</label><input id="start" type="date" value="2019-11-10"/>
+    <label for="end">结束日期：</label><input id="end" type="date" value="2020-11-12"/>
+    <button id=ais onclick="total()1">查询</button>
+</div>
+<div id="myReport" style="width: 500px; height: 500px;"></div>
+<script type="text/javascript" src="../../js/echarts.min.js"></script>
+<script type="text/javascript">
+ 	function total(){
+ 		var start = $('#start').val();
+        var end = $('#end').val();
+		$.post("../../order",{op:"sums",start:start, end:end}, data =>{
+			var price = [];
+			var name = [];
+				$.each(data, function(index, item){
+					name.push(item.sname);
+					price.push(item.sum);
+				})
+				console.log(name);
+				barShow(name, price);	
+		},"json")
+	}
+ 	total();
+ 	$("#ais").click(function(){
+ 		var start = $('#start').val();
+        var end = $('#end').val();
+		$.post("../../order",{op:"sums",start:start, end:end}, data =>{
+			var price = [];
+			var name = [];
+				$.each(data, function(index, item){
+					console.log(item);
+					name.push(item.sname);
+					price.push(item.sum);
+				})
+				console.log(name);
+				barShow(name, price);	
+		},"json")
+ 	})
+	function barShow(xname, yprice){
+		var myChart = echarts.init(document.getElementById('myReport')); 
+		myChart.clear();
+		option = {
+			    xAxis: {
+			        type: 'category',
+			        axisLabel:{
+			    		interval: 0
+			    	},
+			        data: xname
+			    },
+			    yAxis: {
+			        type: 'value'
+			    },
+			    series: [{
+			        data: yprice,
+			        type: 'bar',
+			        showBackground: true,
+			        backgroundStyle: {
+			            color: 'rgba(220, 220, 220, 0.8)'
+			        }
+			    }]
+			};
+				//设置option
+				myChart.setOption(option);	
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<table id="cart_data" data-options="fit:true"></table>
+
+<script>
+var cart_status_obj = [{id:0, name:"待支付"}, {id:1, name:"已支付"}]
+var cart_index = undefined; //用来记录当前正在被编辑的行
+var cart_op;
+var cart_info;
+
+var cart_obj = $('#cart_data').datagrid({
+	url:'../../cart',
+	queryParams: {op:"findByPage"},
+	fitColumns: true,
+	striped: true,
+	loadMsg:"数据加载中...",
+	pagination: true,
+	rownumbers: true,
+	pageSize: 5,
+	singleSelect: true,
+	pageList: [2,5,10,20,30,40,50,100],
+	sortName: "cid",
+	remoteSort: false,
+	columns:[[
+		{field:'cid',title:'订单编号',width:100,align:'center', sortable:"true"},
+		{field:'nickName',title:'用户昵称',width:100,align:'center', editor:{type:"text", options:{required:true}}},
+		{field:'realName',title:'真实姓名',width:100,align:'center', editor:{type:"text", options:{required:true}}},
+		{field:'tel',title:'联系方式',width:100,align:'center', editor:{type:"text", options:{required:true}}},
+		{field:'gname',title:'商品名称',width:100,align:'center', editor:{type:"text", options:{required:true}}},
+		{field:'wprice',title:'价格',width:100,align:'center', editor:{type:"text", options:{required:true}}},
+		{field:'days',title:'下单时间',width:100,align:'center', editor:{type:"text", options:{required:true}}},
+		{field:'status',title:'类型状态',width:100,align:'center', formatter:function(val, row, index){
+			if(val == 0){
+				return '<font color="red">待支付</font>';
+			} else {
+				return '<font color="green">已支付</font>';
+			}
+		},editor:{type:"combobox", options:{required: true, valueField:"id", textField:"name", data:cart_status_obj}}}
+		                                           //传递到后面服务器用的值的属性    显示在界面上给用户看的值属性     这数据来源于那个集合对象
+	]],
+	/*
+	toolbar: [{
+		/*iconCls: 'icon-add',
+		text:"添加",
+		handler: function() {
+			cart_op = "add";
+			cart_info = "添加";
+			
+			if (cart_index != undefined) { // 说明正在被编辑的行
+				return;
+			}
+			//在表格的最前面插入一行
+			cart_obj.datagrid('insertRow',{index: 0, row: {}});
+			cart_index = 0;
+			cart_obj.datagrid('beginEdit', cart_index); // 开始编辑指定行
+		}
+	},'-',{
+	    iconCls: 'icon-edit',
+		text: "修改",
+		handler: function() {
+			cart_op = "update";
+			cart_info = "修改";
+			
+			//判断有没有正在被编辑的行
+			if (cart_index != undefined) { //说明有正在被编辑的行
+				return
+			}
+			
+			//获取选中的行
+			var row = cart_obj.datagrid('getSelected');
+			if (row == null) { //说明没有被选中的行
+				$.messager.show({title:'温馨提示', msg:'请选择您要修改的商品类型...', timeout:2000,showType:'slide'});
+			    return;
+			}
+			
+			//获取选中的行的索引
+			cart_index = cart_obj.datagrid('getRowIndex', row);
+			
+			//开启编辑
+			cart_obj.datagrid('beginEdit', cart_index);
+		}
+	},'-',{  
+		iconCls: 'icon-save',
+		text: "保存",
+		handler: function() {
+			//如果没有被编辑的行，则直接返回
+			if (cart_index == undefined) {
+				return;
+			}
+			
+			cart_obj.datagrid('endEdit', cart_index); //先结束编辑
+			var row = cart_obj.datagrid("getChanges")[0]; //这个是返回所有被修改的行数据，但是我们这里每次只允许编辑一行，所以我去第一行被修改的数据即可
+		
+		if(row == undefined){
+			cart_index = undefined;
+			return;
+		}
+			//此时row是一个Object,那么js中如何在对象中添加属性呢？
+			//row.op = "add"; //row["op"] = "add"
+			row.op = cart_op;
+			
+			//将这一行数据发送到后台，插入到数据库中
+			//$.post("../../type", row, function(data){}, "json");
+			$.post("../../cart", row, data=> {
+				if(data.code == 200) {
+					$.messager.show({title:'成功提示', msg:'管理员信息' + cart_info + '成功...', timeout:2000,showType:'slide'});
+					//刷新页面数据
+					cart_obj.datagrid("reload"); //重新加载数据，目的是重新分页
+				}else{
+					//如果没有成功，则需要回滚数据
+					cart_obj.datagrid("rejectChanges");
+					$.messager.alert('失败提示','管理员信息' + cart_info + '失败...','error');
+				}
+				row = null;
+				cart_index = undefined;
+			}, "json");
+		}
+	},'-',{
+		iconCls: 'icon-undo',
+		text: "撤销",
+		handler: function() {
+			cart_index = undefined;
+			cart_obj.datagrid("rejectChanges");
+			
+		}
+	}]*/
+});
+</script>

@@ -1,0 +1,67 @@
+<table  data-options="fit:true"></table>
+</head>
+<body>
+<div align="center">
+    <label for="start">开始日期：</label><input id="start1" type="date" value="2020-12-06"/>
+    <label for="end">结束日期：</label><input id="end1" type="date" value="2020-12-12"/>
+    <button id="subo" onclick="total()1">查询</button>
+</div>
+<div id="youReport" style="width: 500px; height: 500px; margin：0 auto;"></div>
+<script type="text/javascript" src="../../js/echarts.min.js"></script>
+<script type="text/javascript">
+ 	function total1(){
+ 		var start1 = $('#start1').val();
+        var end1 = $('#end1').val();
+		$.post("../../order",{op:"sum",start1:start1, end1:end1}, data =>{
+			var days = [];
+			var nums = [];
+				$.each(data, function(index, item){
+					console.log(item);
+					days.push(item.day);
+					nums.push(item.sum);
+				})
+				console.log(days);
+				barShow1(days, nums);	
+		},"json")
+	}
+ 	total1();
+ 	$("#subo").click(function(){
+ 		var start1 = $('#start1').val();
+        var end1 = $('#end1').val();
+		$.post("../../order",{op:"sum",start1:start1, end1:end1}, data =>{
+			var days = [];
+			var nums = [];
+				$.each(data, function(index, item){
+					console.log(item);
+					days.push(item.day);
+					nums.push(item.sum);
+				})
+				console.log(days);
+				barShow1(days, nums);	
+		},"json")
+ 	})
+	function barShow1(xdatas, xnum){
+		var myChart1 = echarts.init(document.getElementById('youReport')); 
+		myChart1.clear();
+		 option1 = {
+				 xAxis: {
+				        type: 'category',
+				        axisLabel:{
+				    		interval: 0
+				    	},
+				        data: xdatas
+				    },
+				    yAxis: {
+				        type: 'value'     
+				    },
+				    series: [{
+				    	data: xnum,
+				        type: 'line'
+				    }]
+				};
+				//设置option
+				myChart1.setOption(option1);	
+	}
+</script>
+</body>
+</html>
