@@ -48,39 +48,37 @@ public class ShopInfoController {
 	}
 
 	@RequestMapping("/add")
-	public ResultDTO add(ShopInfo sf, MultipartFile license_pic, MultipartFile[] shop_pic, HttpServletRequest request)  {
-		//ShopInfo shopInfo = fileUploadUtil.uploads(ShopInfo.class, pageContext);
+	public ResultDTO add(ShopInfo sf, MultipartFile license_pic, MultipartFile[] shop_pic, HttpServletRequest request) {
 		String path = request.getServletContext().getInitParameter("uploadPath");
+		System.out.println(path);
 		String basePath = request.getServletContext().getRealPath("");
-		
+		System.out.println(basePath);
 		String savePath = "";
 		File dest = null;
-	
-		//System.out.println(basePath + "\t" + path);
-		if (license_pic != null && license_pic.getSize() > 0) {
+		if(license_pic != null && license_pic.getSize() > 0) {
 			try {
 				savePath = path + "/" + new Date().getTime() + "_" + license_pic.getOriginalFilename();
 				dest = new File(new File(basePath).getParentFile(), savePath);
 				license_pic.transferTo(dest);
 				sf.setLicense("../" + savePath);
+				System.out.println(savePath);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		
-		if (shop_pic != null && shop_pic.length > 0 && shop_pic[0].getSize() > 0) {
+		if(shop_pic != null && shop_pic.length > 0 && shop_pic[0].getSize() > 0) {
 			String picStr = "";
 			try {
-				for (MultipartFile pic : shop_pic) {
+				for(MultipartFile pic : shop_pic) {
 					savePath = path + "/" + new Date().getTime() + "_" + pic.getOriginalFilename();
 					dest = new File(new File(basePath).getParentFile(), savePath);
 					pic.transferTo(dest);
-					if ("".equals(picStr)) {
+					if("".equals(picStr)) {
 						picStr += "../" + savePath;
-					} else {
+					}else{
 						picStr += ";../" + savePath;
 					}
 				}
@@ -91,13 +89,15 @@ public class ShopInfoController {
 				e.printStackTrace();
 			}
 		}
-			
+		System.out.println(sf);
 		int result = shopInfoBizImpl.add(sf);
-		if (result > 0) {
+		System.out.println(result);
+		if(result > 0) {
 			return new ResultDTO(200, "成功");
 		}
-		return new ResultDTO(500, "失败");
+		return new ResultDTO(500, "失败");		
 	}
+	
 	
 	@RequestMapping("/findByPage")
 	public JsonObject findByPage(@RequestParam Map<String, Object> map) {

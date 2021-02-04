@@ -31,7 +31,7 @@ public class ShopInfoBizImpl implements IShopInfoBiz {
 
 	@Override
 	public int add(ShopInfo sp) {
-       if (StringUtil.checkNull(sp.getSname(), sp.getLicense(), sp.getEndHours(), sp.getStartHours(), sp.getPics(), sp.getTel())) {
+       if (StringUtil.checkNull(sp.getSname(), sp.getEndHours(), sp.getStartHours(), sp.getPics(), sp.getTel())) {
 		   return -1;
        }
        return shopInfoMapper.add(sp);

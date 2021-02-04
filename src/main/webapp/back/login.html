@@ -149,10 +149,10 @@
 
 	//点击登录事件
 	$("#login").click(function(){  
- 			var account = $("#account").val();
-			var password = $("#password").val();
+ 			var nickName = $("#account").val();
+			var pwd = $("#password").val();
 			var verify = $("#verify").val();
-			if( account=="" || password=="" || verify==""){
+			if( nickName=="" || pwd=="" || verify==""){
 				var obj = document.getElementById("errorMsg");
 				$("#tipMsg").html("请填写完整的登录信息！");
 				obj.setAttribute("class", "tip-box visiblility-show");
@@ -173,11 +173,11 @@
 			//判断是否勾选记住登录信息
 			if ($("#remember").prop("checked") == true) {
 				//记录信息
-				var account = $("#account").val();
-				var password = $("#password").val();
+				var nickName = $("#account").val();
+				var pwd = $("#password").val();
 				//alert(passWord);
-				$.cookie("account", account,{ expires: 7 });
-				$.cookie("password", password,{ expires: 7 }); // 存储一个带7天期限的 cookie 如果{ expires: 7 } 
+				$.cookie("account", nickName,{ expires: 7 });
+				$.cookie("password", pwd,{ expires: 7 }); // 存储一个带7天期限的 cookie 如果{ expires: 7 } 
 			}else{
 				$.cookie("account", "");
 				$.cookie("password", "");
@@ -185,13 +185,13 @@
 	
 			
 			
-	$.post("../login",{op:"logins", account:account, password: password}, data=>{
+	$.post("../login/logins",{ nickName:nickName, pwd:pwd}, data=>{
 			console.log(data);
-			if(data==200){		
+			if(data.code==200){		
 			//登录成功跳转页面
-			sessionStorage.setItem("account",account);
+			sessionStorage.setItem("account",nickName);
 			window.location.href = "../index.html?"+$("#account").val()+""; 
-		  }else if(data==300){
+		  }else if(data.code==300){
 			  $("#password").val("");
 			  $.cookie("password", "");
 			  $("#verify").val("")
@@ -201,7 +201,7 @@
 				$("#tipMsg").html("该帐户已冻结");
 				obj.setAttribute("class", "tip-box visiblility-show");
 				return;
-		  }else if(data==400){
+		  }else if(data.code==400){
 			  $("#password").val("");
 			  $.cookie("password", "");
 			  $("#verify").val("")

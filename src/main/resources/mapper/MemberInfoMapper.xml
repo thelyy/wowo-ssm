@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.yc.wowo.mapper.IMemberInfoMapper">
+	<insert id="add" parameterType="MemberInfo">
+		insert into memberinfo values(0, #{nickName}, '', #{pwd}, '', #{email}, '', now(), 1)
+	</insert>
+	
+	<select id="login" parameterType="map" resultType="MemberInfo">
+		select nickName, pwd from memberinfo where nickName=#{nickName} and pwd=#{pwd} and status!=0
+	</select>
+	
+	<select id="finds" parameterType="MemberInfo" resultType="MemberInfo">
+		select mid, photo, status, nickName, realName, tel, email, regDate, status from memberinfo where nickName= #{nickName}
+	</select>
+</mapper>

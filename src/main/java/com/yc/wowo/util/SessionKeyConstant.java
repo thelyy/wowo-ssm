@@ -5,4 +5,5 @@ public class SessionKeyConstant {
 	public static final String MEMBERINFOLOGIN = "memberInfoLogin";//会员登录
 	public static final String HOMEINFOLOGIN = "homeinfoaddr";
 	public static final String SHOPINFOLOGIN = "shoppinfocard";
+	public static final String EMAILCODE = "emailCode"; //邮箱验证
 }
